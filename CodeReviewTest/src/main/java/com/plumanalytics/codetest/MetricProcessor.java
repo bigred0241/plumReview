@@ -70,8 +70,7 @@ public class MetricProcessor {
     @Override
     public void run() {
       System.out.println(Thread.currentThread().getId()+ " - Processing file: " + sourceFile.getName());
-      try {
-        BufferedReader reader = new BufferedReader(new FileReader(sourceFile));
+      try (BufferedReader reader = new BufferedReader(new FileReader(sourceFile))) {
         String line = null;
         while ((line = reader.readLine()) != null) {
           try {
@@ -81,7 +80,6 @@ public class MetricProcessor {
             throw new RuntimeException("Unable to parse date from row in file: " + sourceFile.getAbsolutePath() + " - " + line, e);
           }
         }
-        reader.close();
       } catch (IOException e) {
         throw new RuntimeException("Failed to process file: " + sourceFile.getAbsolutePath(), e);
       }
