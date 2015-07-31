@@ -4,15 +4,18 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Used to publish metrics from test files
  */
 public class TestMetricPublisher implements MetricPublisher {
 
-  Map<Date, Map<String, CountInstance>> metricMapByDate = new HashMap<Date, Map<String, CountInstance>>();
-  Map<String, CountInstance> aggregateCountMapById = new HashMap<String, CountInstance>();
-
+  //use treemaps instead of hashmaps - this keeps the data ordered by keys, which will make testing for consistent results
+  //easier (the data isn't guaranteed to be added in the same order for different executions, since there are multiple threads working here)
+  Map<Date, Map<String, CountInstance>> metricMapByDate = new TreeMap<Date, Map<String, CountInstance>>();
+  Map<String, CountInstance> aggregateCountMapById = new TreeMap<String, CountInstance>();
+  
   @Override
   public void publishMetric(MetricMessage message) {
     TestMetricMessage metricMessage = (TestMetricMessage) message;
