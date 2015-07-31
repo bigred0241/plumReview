@@ -3,7 +3,6 @@ package com.plumanalytics.codetest;
 import java.io.*;
 import java.net.URL;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
