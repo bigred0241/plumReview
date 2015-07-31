@@ -2,6 +2,7 @@ package com.plumanalytics.codetest;
 
 import java.io.*;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -76,7 +77,8 @@ public class MetricProcessor {
           try {
             MetricMessage message = publisher.createMessage(line);
             publisher.publishMetric(message);
-          } catch (Throwable e) {
+          //probably don't want to catch throwable here - according to the APIs used above, ParseException is the only exception we exepct to see
+          } catch (ParseException e) {
             throw new RuntimeException("Unable to parse date from row in file: " + sourceFile.getAbsolutePath() + " - " + line, e);
           }
         }
