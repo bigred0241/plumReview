@@ -74,6 +74,8 @@ public class TestMetricPublisher implements MetricPublisher {
       this.count2 += count2;
       this.count3 += count3;
     }
+    
+    //a newline at the end of this output would make it easier to use the output in a diff tool (for debugging)
     public String toString() {
       return count1 + "\t" + count2 + "\t" + count3;
     }
