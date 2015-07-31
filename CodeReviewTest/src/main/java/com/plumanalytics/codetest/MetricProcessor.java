@@ -19,6 +19,7 @@ public class MetricProcessor {
 
   public static void main(String args[]) {
     try {
+    	//recommend making data directory configurable
       URL url = MetricProcessor.class.getResource("/test-data");
       File testDataDir = new File(url.toURI());
       MetricProcessor processor = new MetricProcessor(testDataDir);
