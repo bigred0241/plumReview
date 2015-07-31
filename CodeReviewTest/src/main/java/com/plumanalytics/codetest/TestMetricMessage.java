@@ -8,7 +8,13 @@ import java.util.Date;
  * Concrete test message
  */
 public class TestMetricMessage implements MetricMessage {
-  private static SimpleDateFormat METRIC_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
+	
+  //static date string to be used for each metric message when splitting the provided data  
+  private static final String DATE_FORMAT_STRING = "yyyy/MM/dd";
+	    
+  //SimpleDateFormat is not thread-safe - according to the javadoc, a SimpleDateFormat object should be
+  //                                      created for each thread
+  private SimpleDateFormat METRIC_DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT_STRING);
 
   private String id;
   private Date metricDate;
