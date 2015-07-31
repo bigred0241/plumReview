@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class MetricProcessor {
 
-  File sourceDir;
-  MetricPublisher publisher = new TestMetricPublisher();
+  private final File sourceDir;
+  private final MetricPublisher publisher = new TestMetricPublisher();
 
   public static void main(String args[]) {
     try {
