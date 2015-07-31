@@ -32,7 +32,8 @@ public class MetricProcessor {
     this.sourceDir = sourceDir;
 
   }
-
+  
+  //why protected and not private?
   protected void processFilesMultiThreaded(List<File> fileList) throws InterruptedException {
     LinkedBlockingQueue<Runnable> workQueueu = new LinkedBlockingQueue<Runnable>(5);
     ThreadPoolExecutor threadPool = new ThreadPoolExecutor(10, 10, 5000L, TimeUnit.MILLISECONDS, workQueueu, new ThreadPoolExecutor.CallerRunsPolicy());
