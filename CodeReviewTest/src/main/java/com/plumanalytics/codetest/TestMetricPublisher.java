@@ -2,7 +2,6 @@ package com.plumanalytics.codetest;
 
 import java.text.ParseException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
