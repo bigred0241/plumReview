@@ -16,29 +16,40 @@ public class TestMetricPublisher implements MetricPublisher {
   Map<Date, Map<String, CountInstance>> metricMapByDate = new TreeMap<Date, Map<String, CountInstance>>();
   Map<String, CountInstance> aggregateCountMapById = new TreeMap<String, CountInstance>();
   
-  @Override
+  @Override  
   public void publishMetric(MetricMessage message) {
-    TestMetricMessage metricMessage = (TestMetricMessage) message;
-    Map<String, CountInstance> oneMetric = metricMapByDate.get(metricMessage.getMetricDate());
-    if (oneMetric == null) {
-      oneMetric = new HashMap<String, CountInstance>();
-      metricMapByDate.put(metricMessage.getMetricDate(), oneMetric);
-    }
-    CountInstance countInstance = oneMetric.get(metricMessage.getId());
-    if (countInstance == null) {
-      countInstance = new CountInstance();
-      oneMetric.put(metricMessage.getId(), countInstance);
-    }
-    countInstance.addCounts(metricMessage.getCount1(), metricMessage.getCount2(), metricMessage.getCount3());
-
-    CountInstance aggrCountInstance = aggregateCountMapById.get(metricMessage.getId());
-    if (aggrCountInstance == null) {
-      aggrCountInstance = new CountInstance();
-      aggregateCountMapById.put(metricMessage.getId(), aggrCountInstance);
-    }
-    aggrCountInstance.addCounts(metricMessage.getCount1(), metricMessage.getCount2(), metricMessage.getCount3());
+      mapMetricByDate(message);
+      mapMetricAggregate(message);
   }
-
+  
+  //adding new elements to the date metric map should be synchronized since there are multiple threads calling in to this single TestMetricPublisher instance
+  private synchronized void mapMetricByDate(MetricMessage message) {
+      TestMetricMessage metricMessage = (TestMetricMessage) message;
+      Map<String, CountInstance> oneMetric = metricMapByDate.get(metricMessage.getMetricDate());
+      if (oneMetric == null) {
+          oneMetric = new TreeMap<String, CountInstance>();
+          metricMapByDate.put(metricMessage.getMetricDate(), oneMetric);
+      }
+      CountInstance countInstance = oneMetric.get(metricMessage.getId());
+      if (countInstance == null) {
+          countInstance = new CountInstance();
+          oneMetric.put(metricMessage.getId(), countInstance);
+      }
+      countInstance.addCounts(metricMessage.getCount1(), metricMessage.getCount2(), metricMessage.getCount3());
+  }
+  
+  //adding new elements to the aggregate metric map should be synchronized since there are multiple threads calling in to this single TestMetricPublisher instance
+  private synchronized void mapMetricAggregate(MetricMessage message) {
+      TestMetricMessage metricMessage = (TestMetricMessage) message;
+      CountInstance aggrCountInstance = aggregateCountMapById.get(metricMessage.getId());
+      if (aggrCountInstance == null) {
+          aggrCountInstance = new CountInstance();
+          aggregateCountMapById.put(metricMessage.getId(), aggrCountInstance);
+      }
+      aggrCountInstance.addCounts(metricMessage.getCount1(), metricMessage.getCount2(), metricMessage.getCount3());
+  }
+  
+  
   public MetricMessage createMessage(String line) throws ParseException {
     MetricMessage message = new TestMetricMessage();
     message.init(line);
